@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 
 # Load your model and any other necessary components
-model_loaded = load('water_safety_model.joblib')  # Assuming you have a trained model for this
+model_loaded = load('Gradient_boosting_model.joblib')  # Assuming you have a trained model for this
 scaler_loaded = load('scaler.joblib')  # Load any scaler if used during model training
 
 # List of variables for prediction
