@@ -38,38 +38,43 @@ def main():
             predict_and_display(input_df)  # Single prediction based on user input
     
     else:  # Option to upload file
-        uploaded_file = st.file_uploader("Choose a CSV file", type=['csv'])
+        uploaded_file = st.file_uploader("Choose an Excel file", type=['xlsx'])
         if uploaded_file is not None:
-            data = pd.read_csv(uploaded_file)
+            data = pd.read_excel(uploaded_file)
             
             # Check if the file contains all necessary columns
             if set(variable_list).issubset(data.columns):
+                # Ensure the data has the correct columns for prediction
+                data = data[variable_list]
                 predict_and_display(data)  # File-based prediction
             else:
                 st.error("The uploaded file does not contain all the required columns.")
-    
+
 def predict_and_display(data):
-    # Make predictions without scaling
-    predictions = model_loaded.predict(data)
-    
-    # Combine inputs and predictions into a DataFrame
-    results_df = data.copy()
-    results_df['Prediction'] = predictions
-    
-    # Display the results in a table
-    st.write("Prediction Results:")
-    st.table(results_df)
-    
-    # Display a histogram of the predictions
-    st.write("Histogram of Predictions:")
-    fig, ax = plt.subplots()
-    prediction_counts = pd.Series(predictions).value_counts().sort_index()
-    prediction_counts.plot(kind='bar', ax=ax)
-    ax.set_title("Number of Safe and Unsafe Predictions")
-    ax.set_xlabel("Category (0=Not Safe, 1=Safe)")
-    ax.set_ylabel("Count")
-    ax.yaxis.set_major_locator(ticker.MaxNLocator(integer=True))  # Ensure y-axis has integer ticks
-    st.pyplot(fig)
+    try:
+        # Make predictions
+        predictions = model_loaded.predict(data)
+        
+        # Combine inputs and predictions into a DataFrame
+        results_df = data.copy()
+        results_df['Prediction'] = predictions
+        
+        # Display the results in a table
+        st.write("Prediction Results:")
+        st.table(results_df)
+        
+        # Display a histogram of the predictions
+        st.write("Histogram of Predictions:")
+        fig, ax = plt.subplots()
+        prediction_counts = pd.Series(predictions).value_counts().sort_index()
+        prediction_counts.plot(kind='bar', ax=ax)
+        ax.set_title("Number of Safe and Unsafe Predictions")
+        ax.set_xlabel("Category (0=Not Safe, 1=Safe)")
+        ax.set_ylabel("Count")
+        ax.yaxis.set_major_locator(ticker.MaxNLocator(integer=True))  # Ensure y-axis has integer ticks
+        st.pyplot(fig)
+    except Exception as e:
+        st.error(f"An error occurred during prediction: {e}")
 
 if __name__ == '__main__':
     main()
