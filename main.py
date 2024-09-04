@@ -42,7 +42,7 @@ def main():
         if uploaded_file is not None:
             # Try to read the file and identify the correct header row
             try:
-                # Load the first sheet, assuming headers are in the first row
+                # Load the first sheet, assuming headers are in the second row (index 1)
                 data = pd.read_excel(uploaded_file, header=1)
                 
                 # Print column names for debugging
@@ -67,9 +67,9 @@ def predict_and_display(data):
         results_df = data.copy()
         results_df['Prediction'] = predictions
         
-        # Display the results in a table
+        # Display the results in a scrollable dataframe
         st.write("Prediction Results:")
-        st.table(results_df)
+        st.dataframe(results_df, use_container_width=True)  # Scrollable table
         
         # Display a histogram of the predictions
         st.write("Histogram of Predictions:")
