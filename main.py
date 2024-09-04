@@ -5,9 +5,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 
-# Load your model and any other necessary components
-model_loaded = load('Gradient_boosting_model.joblib')  # Assuming you have a trained model for this
-scaler_loaded = load('scaler.joblib')  # Load any scaler if used during model training
+# Load your model
+model_loaded = load('Gradient_boosting_model.joblib')
 
 # List of variables for prediction
 variable_list = [
@@ -50,11 +49,8 @@ def main():
                 st.error("The uploaded file does not contain all the required columns.")
     
 def predict_and_display(data):
-    # If you use scaling, apply the scaler here
-    scaled_data = scaler_loaded.transform(data)
-    
-    # Make predictions
-    predictions = model_loaded.predict(scaled_data)
+    # Make predictions without scaling
+    predictions = model_loaded.predict(data)
     
     # Combine inputs and predictions into a DataFrame
     results_df = data.copy()
