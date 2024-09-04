@@ -42,6 +42,9 @@ def main():
         if uploaded_file is not None:
             data = pd.read_excel(uploaded_file)
             
+            # Print column names for debugging
+            st.write("Columns in uploaded file:", data.columns.tolist())
+            
             # Check if the file contains all necessary columns
             if set(variable_list).issubset(data.columns):
                 # Ensure the data has the correct columns for prediction
