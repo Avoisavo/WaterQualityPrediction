@@ -40,18 +40,23 @@ def main():
     else:  # Option to upload file
         uploaded_file = st.file_uploader("Choose an Excel file", type=['xlsx'])
         if uploaded_file is not None:
-            data = pd.read_excel(uploaded_file)
-            
-            # Print column names for debugging
-            st.write("Columns in uploaded file:", data.columns.tolist())
-            
-            # Check if the file contains all necessary columns
-            if set(variable_list).issubset(data.columns):
-                # Ensure the data has the correct columns for prediction
-                data = data[variable_list]
-                predict_and_display(data)  # File-based prediction
-            else:
-                st.error("The uploaded file does not contain all the required columns.")
+            # Try to read the file and identify the correct header row
+            try:
+                # Load the first sheet, assuming headers are in the first row
+                data = pd.read_excel(uploaded_file, header=1)
+                
+                # Print column names for debugging
+                st.write("Columns in uploaded file:", data.columns.tolist())
+                
+                # Check if the file contains all necessary columns
+                if set(variable_list).issubset(data.columns):
+                    # Ensure the data has the correct columns for prediction
+                    data = data[variable_list]
+                    predict_and_display(data)  # File-based prediction
+                else:
+                    st.error("The uploaded file does not contain all the required columns.")
+            except Exception as e:
+                st.error(f"An error occurred while reading the file: {e}")
 
 def predict_and_display(data):
     try:
