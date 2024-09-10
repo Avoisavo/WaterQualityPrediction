@@ -6,4 +6,4 @@ numpy
 openpyxl
 matplotlib
 joblib
-pip install -U scikit-learn==1.3.2
+
