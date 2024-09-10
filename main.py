@@ -62,6 +62,9 @@ def main():
                 
                 # If a valid row is selected, show the selected row data
                 if row_index is not None and 0 <= row_index < len(data):
+                            if selected_row_data is not None:
+                            st.write("Populated from file upload:")
+                            st.write(selected_row_data)
                 
                     # Allow the user to play with the values in "Enter values" section
                     st.sidebar.write("Play with selected row values:")
