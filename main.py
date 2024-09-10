@@ -6,11 +6,16 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 import os
 import sklearn
-print(sklearn.__version__)
-
 
 # Define the model path
 MODEL_PATH = 'Gradient_boosting_model.joblib'
+
+# Check scikit-learn version
+try:
+    st.write(f"scikit-learn version: {sklearn.__version__}")
+except ImportError:
+    st.error("scikit-learn is not installed. Please install it.")
+    st.stop()
 
 # Streamlit app starts here
 def main():
