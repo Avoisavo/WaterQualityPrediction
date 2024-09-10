@@ -7,3 +7,4 @@ openpyxl
 matplotlib
 joblib
 scikit-learn==1.2.0  # Replace with the correct version
+pip install -r requirements.txt
