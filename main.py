@@ -59,7 +59,13 @@ def main():
                 
                 # Let user select a row by index
                 row_index = st.number_input("Select row index for input:", min_value=0, max_value=len(data)-1, step=1)
-                            
+                
+                # If a valid row is selected, show the selected row data
+                if row_index is not None and 0 <= row_index < len(data):
+                    st.write(f"Selected row {row_index}:")
+                    selected_row_data = data.iloc[row_index].to_dict()
+                    st.write(selected_row_data)
+                
                     # Allow the user to play with the values in "Enter values" section
                     st.sidebar.write("Play with selected row values:")
                     user_input = {}
