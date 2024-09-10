@@ -62,7 +62,6 @@ def main():
                 
                 # If a valid row is selected, show the selected row data
                 if row_index is not None and 0 <= row_index < len(data):
-                    st.write(f"Selected row {row_index}:")
                 
                     # Allow the user to play with the values in "Enter values" section
                     st.sidebar.write("Play with selected row values:")
