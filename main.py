@@ -4,6 +4,9 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
+import sklearn
+print(sklearn.__version__)
+
 
 # Load your model
 model_loaded = load('Gradient_boosting_model.joblib')
