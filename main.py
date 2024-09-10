@@ -25,11 +25,17 @@ def main():
     st.sidebar.title("Options")
     option = st.sidebar.selectbox("Choose how to input data", ["Enter values", "Upload file"])
     
+    # Variable to store selected columns for upload option
+    selected_columns = []
+
     if option == "Enter values":
         # Dynamically create input boxes for each feature
         user_input = {}
         for variable in variable_list:
-            user_input[variable] = st.number_input(f"Enter value for {variable}:", min_value=0.0, format="%.4f")
+            value = st.number_input(f"Enter value for {variable}:", min_value=0.0, format="%.4f")
+            if value < 0:
+                st.error(f"{variable} cannot be a negative value.")
+            user_input[variable] = value
         
         # Predict button
         if st.button('Predict'):
@@ -40,7 +46,6 @@ def main():
     else:  # Option to upload file
         uploaded_file = st.file_uploader("Choose an Excel file", type=['xlsx'])
         if uploaded_file is not None:
-            # Try to read the file and identify the correct header row
             try:
                 # Load the first sheet, assuming headers are in the second row (index 1)
                 data = pd.read_excel(uploaded_file, header=1)
@@ -48,13 +53,25 @@ def main():
                 # Print column names for debugging
                 st.write("Columns in uploaded file:", data.columns.tolist())
                 
-                # Check if the file contains all necessary columns
-                if set(variable_list).issubset(data.columns):
-                    # Ensure the data has the correct columns for prediction
-                    data = data[variable_list]
+                # Select columns
+                selected_columns = st.multiselect("Select columns for prediction:", data.columns.tolist(), default=variable_list)
+                
+                # Ensure that selected columns match variable_list for future input use
+                if set(selected_columns).issubset(data.columns):
+                    data = data[selected_columns]  # Data based on selected columns
                     predict_and_display(data)  # File-based prediction
+                    
+                    # Populate the enter values form with selected columns for further testing
+                    st.sidebar.write("Play with selected columns:")
+                    user_input = {}
+                    for variable in selected_columns:
+                        user_input[variable] = st.sidebar.number_input(f"Enter value for {variable}:", min_value=0.0, format="%.4f")
+                    
+                    if st.sidebar.button("Test new values"):
+                        input_df = pd.DataFrame([user_input])
+                        predict_and_display(input_df)
                 else:
-                    st.error("The uploaded file does not contain all the required columns.")
+                    st.error("The uploaded file does not contain all the selected columns.")
             except Exception as e:
                 st.error(f"An error occurred while reading the file: {e}")
 
